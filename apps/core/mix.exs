@@ -25,8 +25,12 @@ defmodule Core.MixProject do
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
-    [
-      {:non_prod_dep, in_umbrella: true, only: [:test, :dev]}
+    maybe_deps = [
+      if Mix.env() in [:test, :dev] do
+        {:non_prod_dep, in_umbrella: true}
+      end
     ]
+
+    Enum.reject(maybe_deps, &is_nil/1)
   end
 end
